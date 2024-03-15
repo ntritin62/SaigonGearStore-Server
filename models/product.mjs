@@ -9,8 +9,9 @@ const productSchema = new Schema(
       required: true,
     },
     brand: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: 'Brand',
     },
     price: {
       type: Number,
