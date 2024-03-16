@@ -1,12 +1,8 @@
-// const express = require('express');
-// const { body } = require('express-validator');
-
 import express from 'express';
 import { body } from 'express-validator';
 import isAuth from '../middlewares/is-auth.mjs';
 import { User } from '../models/user.mjs';
-
-// const authController = require('../controllers/auth');
+import { login, signup } from '../controllers/authController.mjs';
 
 const router = express.Router();
 
@@ -35,7 +31,7 @@ router.put(
         return true;
       }),
   ],
-  authController.signup
+  signup
 );
 
 router.post(
@@ -44,7 +40,7 @@ router.post(
     body('email').isEmail().normalizeEmail(),
     body('password').trim().isLength({ min: 6 }),
   ],
-  authController.login
+  login
 );
 
 // router.get('/user', isAuth, authController.getUser);
