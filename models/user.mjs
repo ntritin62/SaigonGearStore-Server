@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { SchemaType } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -12,14 +12,19 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
     },
     address: [
       {
-        type: String,
-        required: false,
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'Address',
       },
     ],
   },
@@ -28,4 +33,25 @@ const userSchema = new Schema(
   }
 );
 
-export default mongoose.model('User', userSchema);
+const addressSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export const User = mongoose.model('User', userSchema);
+export const Address = mongoose.model('Address', addressSchema);
