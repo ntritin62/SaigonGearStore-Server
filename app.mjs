@@ -2,9 +2,11 @@ import express from 'express';
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import multer from 'multer';
-import User from './models/user.mjs';
 import { Category, Brand } from './models/category.mjs';
 import Product from './models/product.mjs';
+import Inventory from './models/inventory.mjs';
+import { Address, User } from './models/user.mjs';
+import Cart from './models/cart.mjs';
 
 const app = express();
 
