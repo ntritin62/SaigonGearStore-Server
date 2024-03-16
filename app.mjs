@@ -1,6 +1,10 @@
 import express from 'express';
 import 'dotenv/config';
 import mongoose from 'mongoose';
+import multer from 'multer';
+import User from './models/user.mjs';
+import { Category, Brand } from './models/category.mjs';
+import Product from './models/product.mjs';
 
 const app = express();
 
@@ -18,7 +22,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
