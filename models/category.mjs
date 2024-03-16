@@ -7,6 +7,10 @@ const brandSchema = new Schema({
     type: String,
     required: true,
   },
+  logoImage: {
+    type: String,
+    required: true,
+  },
 });
 
 const categorySchema = new Schema({

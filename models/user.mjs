@@ -7,6 +7,7 @@ const userSchema = new Schema(
     fullName: {
       type: String,
       required: false,
+      default: '',
     },
     email: {
       type: String,
@@ -15,6 +16,7 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String,
       required: false,
+      default: '',
     },
     password: {
       type: String,
