@@ -6,7 +6,7 @@ import { login, signup } from '../controllers/authController.mjs';
 
 const router = express.Router();
 
-router.put(
+router.post(
   '/signup',
   [
     body('email')
@@ -21,8 +21,7 @@ router.put(
       })
       .normalizeEmail(),
     body('password').trim().isLength({ min: 6 }),
-    body('username').trim().not().isEmpty(),
-    body('rePassword')
+    body('confirmPassword')
       .trim()
       .custom((value, { req }) => {
         if (value !== req.body.password) {

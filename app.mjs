@@ -3,7 +3,6 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-
 import authRoutes from './routes/auth.mjs';
 
 const app = express();

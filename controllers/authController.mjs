@@ -5,14 +5,15 @@ import { User } from '../models/user.mjs';
 
 export const signup = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
-  const { email, username, password } = req.body;
   try {
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+    const { email, username, password } = req.body;
+
     const hashedPw = await bcrypt.hash(password, 12);
     const user = new User({
       email,
