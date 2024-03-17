@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import authRoutes from './routes/auth.mjs';
+import categoryRoutes from './routes/category.mjs';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/categories', categoryRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

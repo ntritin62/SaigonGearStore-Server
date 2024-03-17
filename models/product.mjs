@@ -20,10 +20,12 @@ const productSchema = new Schema(
     sale: {
       type: Number,
       required: false,
+      default: 0,
     },
     description: {
       type: String,
       required: false,
+      default: '',
     },
     images: [
       {
@@ -31,13 +33,11 @@ const productSchema = new Schema(
         required: true,
       },
     ],
-    category: [
-      {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Tag',
-      },
-    ],
+    category: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'Category',
+    },
   },
   { timestamps: true }
 );
