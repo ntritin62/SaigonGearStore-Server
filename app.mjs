@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import authRoutes from './routes/auth.mjs';
 import categoryRoutes from './routes/category.mjs';
 import productsRoutes from './routes/products.mjs';
+import productRoutes from './routes/product.mjs';
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/products', productsRoutes);
+app.use('/product', productRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

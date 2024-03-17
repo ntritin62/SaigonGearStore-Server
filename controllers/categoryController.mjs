@@ -2,7 +2,6 @@ import { Category } from '../models/category.mjs';
 
 export const getBrands = async (req, res, next) => {
   const cateName = req.params.categoryName;
-
   try {
     const brands = await Category.find({ categoryName: cateName })
       .populate('brands')
