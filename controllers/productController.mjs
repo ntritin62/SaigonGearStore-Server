@@ -78,7 +78,7 @@ export const getProductsByCategoryOrBrands = async (req, res, next) => {
   }
 
   try {
-    const products = await Product.find(query).limit(4);
+    const products = await Product.find(query).populate('brand').limit(4);
 
     res.status(200).json({
       message: 'Product fetched successfully',

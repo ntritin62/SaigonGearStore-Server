@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.mjs';
 import categoryRoutes from './routes/category.mjs';
 import productsRoutes from './routes/products.mjs';
 import productRoutes from './routes/product.mjs';
+import { createClient } from 'redis';
 
 const app = express();
 
@@ -58,6 +59,10 @@ mongoose
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.5sd0ofw.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
   )
   .then((result) => {
+    createClient({
+      url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    });
+
     app.listen(process.env.PORT || 8080);
   })
   .catch((err) => console.log(err));
