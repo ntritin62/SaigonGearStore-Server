@@ -87,3 +87,31 @@ export const indeCreaseQuantityProductInCart = async (req, res, next) => {
     message: `${type} product quantity in cart successfully`,
   });
 };
+
+export const getProductDataInCart = async (req, res, next) => {
+  await client.connect();
+  const cartId = req.cartId._id.toString();
+
+  let productKeys = await client.HGETALL(`cart:${cartId}`);
+  const productArray = Object.entries(productKeys).map(([key, value]) => {
+    const productId = key.slice(key.indexOf(':') + 1);
+    return {
+      id: productId,
+      quantity: value,
+    };
+  });
+
+  const products = await Promise.all(
+    productArray.map(async (productKey) => {
+      let product = await Product.findById(productKey.id);
+      product = { ...product, quantity: +productKey.quantity };
+      return product;
+    })
+  );
+
+  await client.disconnect();
+  res.status(200).json({
+    message: `fetch products in cart successfully`,
+    products: products,
+  });
+};
