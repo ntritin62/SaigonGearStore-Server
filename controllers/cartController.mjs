@@ -10,9 +10,9 @@ const client = createClient({
   },
 });
 
-export const addToCart = async (req, res, next) => {
-  await client.connect();
+await client.connect();
 
+export const addToCart = async (req, res, next) => {
   const cartId = req.cartId;
   const userId = req.userId;
   const product = req.body.product;
@@ -44,31 +44,28 @@ export const addToCart = async (req, res, next) => {
       );
     }
   }
-  await client.disconnect();
+
   res.status(200).json({
     message: 'Added to Cart successfully',
   });
 };
 
 export const deleteProductInCart = async (req, res, next) => {
-  await client.connect();
   const cartId = req.cartId._id;
   const productId = req.body.productId;
 
   await client.HDEL(`cart:${cartId}`, `product:${productId}`);
 
   if (!(await client.EXISTS(`cart:${cartId}`))) {
-    await cart.findOneAndDelete(cartId);
+    await Cart.findOneAndDelete(cartId);
   }
 
-  await client.disconnect();
   res.status(200).json({
     message: 'Deleted product in cart successfully',
   });
 };
 
 export const indeCreaseQuantityProductInCart = async (req, res, next) => {
-  await client.connect();
   const type = req.params.type;
   const cartId = req.cartId._id.toString();
   const productId = req.body.productId;
@@ -82,36 +79,50 @@ export const indeCreaseQuantityProductInCart = async (req, res, next) => {
   } else {
     await client.HINCRBY(`cart:${cartId}`, `product:${productId}`, 1);
   }
-  await client.disconnect();
+
   res.status(200).json({
     message: `${type} product quantity in cart successfully`,
   });
 };
 
 export const getProductDataInCart = async (req, res, next) => {
-  await client.connect();
-  const cartId = req.cartId._id.toString();
+  if (req.cartId) {
+    const cartId = req.cartId._id.toString();
+    let productKeys = await client.HGETALL(`cart:${cartId}`);
+    const productArray = Object.entries(productKeys).map(([key, value]) => {
+      const productId = key.slice(key.indexOf(':') + 1);
+      return {
+        id: productId,
+        quantity: value,
+      };
+    });
 
-  let productKeys = await client.HGETALL(`cart:${cartId}`);
-  const productArray = Object.entries(productKeys).map(([key, value]) => {
-    const productId = key.slice(key.indexOf(':') + 1);
-    return {
-      id: productId,
-      quantity: value,
-    };
-  });
+    let products = await Promise.all(
+      productArray.map(async (productKey) => {
+        let product = await Product.findById(productKey.id).populate('brand');
+        product = { ...product, quantity: +productKey.quantity };
+        return product;
+      })
+    );
 
-  const products = await Promise.all(
-    productArray.map(async (productKey) => {
-      let product = await Product.findById(productKey.id);
-      product = { ...product, quantity: +productKey.quantity };
-      return product;
-    })
-  );
+    products = products.map(({ _doc, quantity }) => {
+      return { ..._doc, quantity };
+    });
+    let totalPrice = 0;
+    for (const product of products) {
+      totalPrice +=
+        (product.price - (product.sale / 100) * product.price) *
+        product.quantity;
+    }
 
-  await client.disconnect();
-  res.status(200).json({
-    message: `fetch products in cart successfully`,
-    products: products,
-  });
+    res.status(200).json({
+      message: `fetch products in cart successfully`,
+      cart: { products, totalPrice },
+    });
+  } else {
+    res.status(200).json({
+      message: `user has no cart`,
+      products: [],
+    });
+  }
 };
