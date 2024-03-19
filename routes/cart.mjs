@@ -1,11 +1,15 @@
 import express from 'express';
 import isAuth from '../middlewares/is-auth.mjs';
 import getCartId from '../middlewares/get-cartId.mjs';
-// import { getCart } from '../controllers/cartController.mjs';
-import { addToCart } from '../controllers/cartController.mjs';
+
+import {
+  addToCart,
+  deleteProductInCart,
+} from '../controllers/cartController.mjs';
 
 const router = express.Router();
 
 router.post('', isAuth, getCartId, addToCart);
+router.delete('', isAuth, getCartId, deleteProductInCart);
 
 export default router;

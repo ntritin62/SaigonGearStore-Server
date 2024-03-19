@@ -2,10 +2,10 @@ import { createClient } from 'redis';
 import Cart from '../models/cart.mjs';
 
 const client = createClient({
-  password: 'QNJjfEBJl26YDtDGbMV7Hftft6umeE4K',
+  password: `${process.env.REDIS_PASSWORD}`,
   socket: {
-    host: 'redis-16772.c252.ap-southeast-1-1.ec2.cloud.redislabs.com',
-    port: 16772,
+    host: `${process.env.REDIS_HOST}`,
+    port: `${process.env.REDIS_PORT}`,
   },
 });
 
@@ -14,7 +14,6 @@ export const addToCart = async (req, res, next) => {
 
   const cartId = req.cartId;
   const userId = req.userId;
-
   const product = req.body.product;
 
   if (!cartId) {
@@ -57,5 +56,32 @@ export const addToCart = async (req, res, next) => {
   await client.disconnect();
   res.status(200).json({
     message: 'Added to Cart successfully',
+  });
+};
+
+export const deleteProductInCart = async (req, res, next) => {
+  await client.connect();
+  const cartId = req.cartId;
+  const productId = req.body.productId;
+
+  const cart = await Cart.findById(cartId);
+
+  const index = cart.products.findIndex(
+    (product) => product._id.toString() === productId
+  );
+
+  if (index >= 0) {
+    await client.HDEL(`cart:${cart._id}`, `product:${productId}`);
+    cart.products.splice(index, 1);
+    if (cart.products.length === 0) {
+      await cart.deleteOne();
+    } else {
+      await cart.save();
+    }
+  }
+
+  await client.disconnect();
+  res.status(200).json({
+    message: 'Deleted product in cart successfully',
   });
 };
