@@ -31,23 +31,11 @@ export const addToCart = async (req, res, next) => {
     );
   } else {
     const cart = await Cart.findById(cartId);
-    if (
-      await client.HEXISTS(
-        `cart:${cart._id.toString()}`,
-        `product:${product._id.toString()}`
-      )
-    ) {
-      await client.HINCRBY(
-        `cart:${cart._id.toString()}`,
-        `product:${product._id.toString()}`,
-        product.quantity
-      );
 
-      cart.products.push(product);
-    } else {
-      await client.HSET(
-        `cart:${cart._id.toString()}`,
-        `product:${product._id.toString()}`,
+    if (await client.HEXISTS(`cart:${cart._id}`, `product:${product._id}`)) {
+      await client.HINCRBY(
+        `cart:${cart._id}`,
+        `product:${product._id}`,
         product.quantity
       );
       const productId = product._id;
@@ -56,6 +44,13 @@ export const addToCart = async (req, res, next) => {
       );
 
       productExists.quantity += product.quantity;
+    } else {
+      await client.HSET(
+        `cart:${cart._id}`,
+        `product:${product._id}`,
+        product.quantity
+      );
+      cart.products.push(product);
     }
     await cart.save();
   }
