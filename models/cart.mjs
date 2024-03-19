@@ -9,19 +9,19 @@ const cartSchema = new Schema(
       required: true,
       ref: 'User',
     },
-    products: [
-      {
-        _id: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'Product',
-        },
-        quantity: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
+    // products: [
+    //   {
+    //     _id: {
+    //       type: Schema.Types.ObjectId,
+    //       required: true,
+    //       ref: 'Product',
+    //     },
+    //     quantity: {
+    //       type: Number,
+    //       required: true,
+    //     },
+    //   },
+    // ],
   },
   { timestamps: true }
 );
