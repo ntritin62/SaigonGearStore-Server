@@ -9,11 +9,6 @@ const orderSchema = new Schema(
       required: true,
       ref: 'User',
     },
-    cartId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'Cart',
-    },
     shipping: {
       type: Schema.Types.ObjectId,
       required: true,

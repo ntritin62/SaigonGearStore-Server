@@ -8,6 +8,7 @@ import categoryRoutes from './routes/category.mjs';
 import productsRoutes from './routes/products.mjs';
 import productRoutes from './routes/product.mjs';
 import cartRoutes from './routes/cart.mjs';
+import checkoutRoutes from './routes/checkout.mjs';
 
 const app = express();
 
@@ -46,9 +47,9 @@ app.use('/categories', categoryRoutes);
 app.use('/products', productsRoutes);
 app.use('/product', productRoutes);
 app.use('/cart', cartRoutes);
+app.use('/checkout', checkoutRoutes);
 
 app.use((error, req, res, next) => {
-  console.log(error);
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
