@@ -16,6 +16,10 @@ const orderSchema = new Schema(
     },
     status: {
       type: Boolean,
+      default: false,
+    },
+    amount: {
+      type: Number,
       require: true,
     },
     products: [

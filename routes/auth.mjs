@@ -2,7 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import isAuth from '../middlewares/is-auth.mjs';
 import { User } from '../models/user.mjs';
-import { login, signup } from '../controllers/authController.mjs';
+import { login, signup, getUser } from '../controllers/authController.mjs';
 
 const router = express.Router();
 
@@ -42,6 +42,6 @@ router.post(
   login
 );
 
-// router.get('/user', isAuth, authController.getUser);
+router.get('/user', isAuth, getUser);
 
 export default router;

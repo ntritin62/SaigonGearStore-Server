@@ -62,3 +62,21 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getUser = async (req, res, next) => {
+  const userId = req.userId;
+  try {
+    const user = await User.findById(userId).populate('address');
+    if (!user) {
+      const error = new Error("Can't find user");
+      error.statusCode = 401;
+      throw error;
+    }
+    res.status(200).json({
+      message: 'Fetch user successfully',
+      user: user,
+    });
+  } catch (e) {
+    next(er);
+  }
+};

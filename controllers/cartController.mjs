@@ -122,7 +122,7 @@ export const getProductDataInCart = async (req, res, next) => {
   } else {
     res.status(200).json({
       message: `user has no cart`,
-      products: [],
+      cart: { products: [], totalPrice: 0 },
     });
   }
 };

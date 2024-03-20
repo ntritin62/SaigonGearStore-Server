@@ -29,15 +29,6 @@ const userSchema = new Schema(
         ref: 'Address',
       },
     ],
-    favorites: [
-      {
-        products: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'Product',
-        },
-      },
-    ],
   },
   {
     timestamps: true,
