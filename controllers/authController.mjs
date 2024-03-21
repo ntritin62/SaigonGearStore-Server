@@ -66,7 +66,10 @@ export const login = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const user = await User.findById(userId).populate('address');
+    const user = await User.findById(userId).populate({
+      path: 'address',
+      options: { sort: { updatedAt: -1 } },
+    });
     if (!user) {
       const error = new Error("Can't find user");
       error.statusCode = 401;

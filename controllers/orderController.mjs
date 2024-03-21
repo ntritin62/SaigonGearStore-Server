@@ -4,6 +4,7 @@ export const getOrders = async (req, res, next) => {
   const userId = req.userId;
 
   const orders = await Order.find({ userId: userId })
+    .select('-userId')
     .populate('products.productId')
     .populate('shipping');
 
