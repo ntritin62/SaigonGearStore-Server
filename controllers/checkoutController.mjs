@@ -81,6 +81,7 @@ export const confirmPayment = async (req, res, next) => {
   const cartId = req.cartId._id;
   const userId = req.userId;
   const cart = req.body.cart;
+  console.log(cart);
 
   await client.DEL(`cart:${cartId}`);
   await Cart.findOneAndDelete(cartId);
