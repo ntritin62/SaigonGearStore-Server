@@ -6,7 +6,8 @@ export const getOrders = async (req, res, next) => {
   const orders = await Order.find({ userId: userId })
     .select('-userId')
     .populate('products.productId')
-    .populate('shipping');
+    .populate('shipping')
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     message: 'Fetch orders successfully',
