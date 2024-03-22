@@ -11,6 +11,7 @@ import cartRoutes from './routes/cart.mjs';
 import checkoutRoutes from './routes/checkout.mjs';
 import orderRoutes from './routes/order.mjs';
 import addressRoutes from './routes/address.mjs';
+import userRoutes from './routes/user.mjs';
 const app = express();
 
 const fileStorage = multer.memoryStorage({});
@@ -51,6 +52,7 @@ app.use('/cart', cartRoutes);
 app.use('/checkout', checkoutRoutes);
 app.use('/orders', orderRoutes);
 app.use('/address', addressRoutes);
+app.use('/user', userRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
