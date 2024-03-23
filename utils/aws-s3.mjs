@@ -15,8 +15,9 @@ const s3 = new S3Client({
   region: 'ap-southeast-1',
 });
 
-export const uploadToS3 = async ({ file, prefix }) => {
-  const key = `${prefix}-${uuid()}`;
+export const uploadToS3 = async (file, product, prefix) => {
+  const key = `${product}-${prefix}`;
+
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET,
     Key: key,
@@ -25,10 +26,10 @@ export const uploadToS3 = async ({ file, prefix }) => {
   });
 
   try {
-    await s3.send(command);
+    const response = await s3.send(command);
+
     return { key };
   } catch (error) {
-    console.log(error);
     return { error };
   }
 };

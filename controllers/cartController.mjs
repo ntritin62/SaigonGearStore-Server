@@ -3,7 +3,11 @@ import Cart from '../models/cart.mjs';
 import Product from '../models/product.mjs';
 
 const client = createClient({
-  url: 'redis://default:QNJjfEBJl26YDtDGbMV7Hftft6umeE4K@redis-16772.c252.ap-southeast-1-1.ec2.cloud.redislabs.com:16772',
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
 });
 
 await client.connect();

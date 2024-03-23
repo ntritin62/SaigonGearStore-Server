@@ -113,17 +113,40 @@ export const getAllProducts = async (req, res, next) => {
 export const addProduct = async (req, res, next) => {
   const files = req.files;
   const productData = req.body;
+  try {
+    const cateId = await Category.findOne({
+      categoryName: productData.category,
+    }).select('_id');
 
-  const cateId = await Category.find({
-    categoryName: productData.category,
-  }).select('_id');
+    const product = new Product({
+      name: productData.name,
+      brand: productData.brand,
+      price: productData.price,
+      sale: productData.saleoff,
+      description: productData.description,
+      category: cateId,
+    });
 
-  const product = new Product({
-    name: productData.name,
-    brand: productData.brand,
-    price: productData.price,
-    sale: productData.saleoff,
-    description: productData.description,
-    category: cateId,
-  });
+    const productId = product._id;
+
+    const uploadPromises = files.map(async (file, i) => {
+      const { key, error } = await uploadToS3(file, productId, i);
+      if (error) {
+        throw error;
+      }
+      return { key, index: i };
+    });
+
+    const results = await Promise.all(uploadPromises);
+
+    results.sort((a, b) => a.index - b.index);
+    results.forEach(({ key }) => product.images.push(key));
+
+    await product.save();
+    res.status(200).json({
+      message: 'Added product successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
 };
