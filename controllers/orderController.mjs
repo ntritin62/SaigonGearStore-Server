@@ -1,4 +1,5 @@
 import Order from '../models/order.mjs';
+import product from '../models/product.mjs';
 
 export const getOrders = async (req, res, next) => {
   const userId = req.userId;

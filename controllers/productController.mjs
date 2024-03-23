@@ -33,6 +33,7 @@ export const getProductsByCategory = async (req, res, next) => {
         .populate('brand')
         .select('-category');
     }
+
     res.status(200).json({
       message: 'Products fetched successfully',
       products,
@@ -51,6 +52,7 @@ export const getProductById = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+
     res.status(200).json({
       message: 'Product fetched successfully',
       product,
@@ -92,7 +94,7 @@ export const getProductsByCategoryOrBrands = async (req, res, next) => {
 
 export const getAllProducts = async (req, res, next) => {
   try {
-    const products = await Product.find()
+    let products = await Product.find()
       .populate('brand')
       .populate('category')
       .sort({ createdAt: -1 });
@@ -101,6 +103,7 @@ export const getAllProducts = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+
     res.status(200).json({
       message: 'Products fetched successfully',
       products,
@@ -140,7 +143,9 @@ export const addProduct = async (req, res, next) => {
     const results = await Promise.all(uploadPromises);
 
     results.sort((a, b) => a.index - b.index);
-    results.forEach(({ key }) => product.images.push(key));
+    results.forEach(({ key }) =>
+      product.images.push(`${process.env.CLOUDFRONT_URL}${key}`)
+    );
 
     await product.save();
     res.status(200).json({
