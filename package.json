@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@aws-sdk/s3-request-presigner": "^3.540.0",
+    "aws-sdk": "^2.1584.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
@@ -20,6 +23,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.0",
     "redis": "^4.6.13",
-    "stripe": "^14.21.0"
+    "stripe": "^14.21.0",
+    "uuid": "^9.0.1"
   }
 }

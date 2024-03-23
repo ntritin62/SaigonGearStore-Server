@@ -1,6 +1,7 @@
 import Product from '../models/product.mjs';
 import { Category } from '../models/category.mjs';
 import { Brand } from '../models/category.mjs';
+import { uploadToS3 } from '../utils/aws-s3.mjs';
 
 export const getProductsByCategory = async (req, res, next) => {
   const cateName = req.params.categoryName;
@@ -87,4 +88,42 @@ export const getProductsByCategoryOrBrands = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+export const getAllProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find()
+      .populate('brand')
+      .populate('category')
+      .sort({ createdAt: -1 });
+    if (!products) {
+      const error = new Error('Could not find products.');
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({
+      message: 'Products fetched successfully',
+      products,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addProduct = async (req, res, next) => {
+  const files = req.files;
+  const productData = req.body;
+
+  const cateId = await Category.find({
+    categoryName: productData.category,
+  }).select('_id');
+
+  const product = new Product({
+    name: productData.name,
+    brand: productData.brand,
+    price: productData.price,
+    sale: productData.saleoff,
+    description: productData.description,
+    category: cateId,
+  });
 };

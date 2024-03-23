@@ -12,6 +12,7 @@ import checkoutRoutes from './routes/checkout.mjs';
 import orderRoutes from './routes/order.mjs';
 import addressRoutes from './routes/address.mjs';
 import userRoutes from './routes/user.mjs';
+import adminRoutes from './routes/admin.mjs';
 const app = express();
 
 const fileStorage = multer.memoryStorage({});
@@ -31,7 +32,7 @@ const fileFilter = (req, file, cb) => {
 app.use(bodyParser.json());
 
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+  multer({ storage: fileStorage, fileFilter: fileFilter }).array('images')
 );
 
 app.use((req, res, next) => {
@@ -53,6 +54,7 @@ app.use('/checkout', checkoutRoutes);
 app.use('/orders', orderRoutes);
 app.use('/address', addressRoutes);
 app.use('/user', userRoutes);
+app.use('/admin', adminRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
