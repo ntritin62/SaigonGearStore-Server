@@ -5,7 +5,7 @@ export const editUser = async (req, res, next) => {
   const userData = req.body.userData;
 
   const user = await User.findById(userId);
-  user.name = userData.name;
+  user.fullName = userData.name;
   user.email = userData.email;
   user.phoneNumber = userData.phoneNumber;
 

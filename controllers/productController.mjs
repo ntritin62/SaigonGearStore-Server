@@ -46,7 +46,9 @@ export const getProductsByCategory = async (req, res, next) => {
 export const getProductById = async (req, res, next) => {
   const productId = req.params.productId;
   try {
-    const product = await Product.findById(productId).populate('brand');
+    const product = await Product.findById(productId)
+      .populate('brand')
+      .populate('category');
     if (!product) {
       const error = new Error('Could not find product.');
       error.statusCode = 404;
