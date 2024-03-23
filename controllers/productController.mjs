@@ -97,7 +97,7 @@ export const getAllProducts = async (req, res, next) => {
     let products = await Product.find()
       .populate('brand')
       .populate('category')
-      .sort({ createdAt: -1 });
+      .sort({ updatedAt: -1 });
     if (!products) {
       const error = new Error('Could not find products.');
       error.statusCode = 404;
@@ -150,6 +150,32 @@ export const addProduct = async (req, res, next) => {
     await product.save();
     res.status(200).json({
       message: 'Added product successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const editProduct = async (req, res, next) => {
+  const productData = req.body;
+  const productId = req.params.productId;
+  try {
+    const product = await Product.findById(productId);
+
+    const cateId = await Category.findOne({
+      categoryName: productData.category,
+    }).select('_id');
+
+    product.name = productData.name;
+    product.brand = productData.brand;
+    product.price = productData.price;
+    product.sale = productData.saleoff;
+    product.description = productData.description;
+    product.category = cateId;
+    await product.save();
+
+    res.status(200).json({
+      message: 'Edited product successfully',
     });
   } catch (err) {
     next(err);
