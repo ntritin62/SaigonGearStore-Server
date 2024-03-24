@@ -183,3 +183,28 @@ export const editProduct = async (req, res, next) => {
     next(err);
   }
 };
+
+export const searchProduct = async (req, res, next) => {
+  const searchTerm = req.query.searchTerm;
+
+  try {
+    let products;
+    if (!searchTerm) {
+      return res.status(200).json({
+        message: 'Search products successfully',
+        products: [],
+      });
+    } else {
+      products = await Product.find({
+        name: { $regex: searchTerm, $options: 'i' },
+      });
+    }
+
+    res.status(200).json({
+      message: 'Search products successfully',
+      products: products,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

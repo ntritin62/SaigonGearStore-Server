@@ -5,7 +5,11 @@ import Product from '../models/product.mjs';
 import Cart from '../models/cart.mjs';
 
 const client = createClient({
-  url: process.env.REDIS_URL,
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
 });
 
 await client.connect();
