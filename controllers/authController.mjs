@@ -80,6 +80,6 @@ export const getUser = async (req, res, next) => {
       user: user,
     });
   } catch (e) {
-    next(er);
+    next(e);
   }
 };

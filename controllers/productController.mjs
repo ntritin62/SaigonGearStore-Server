@@ -160,6 +160,7 @@ export const addProduct = async (req, res, next) => {
 
 export const editProduct = async (req, res, next) => {
   const productData = req.body;
+
   const productId = req.params.productId;
   try {
     const product = await Product.findById(productId);
@@ -171,7 +172,9 @@ export const editProduct = async (req, res, next) => {
     product.name = productData.name;
     product.brand = productData.brand;
     product.price = productData.price;
+
     product.sale = productData.saleoff;
+
     product.description = productData.description;
     product.category = cateId;
     await product.save();
